@@ -66,19 +66,29 @@ const REPO = "Frei-Remodeling";
 const BRANCH = "main";
 const BASE_PATH = "project-images";
 
-const API =
-  `https://data.jsdelivr.com/v1/package/gh/${OWNER}/${REPO}@${BRANCH}/${BASE_PATH}`;
+const ROOT_API =
+  `https://data.jsdelivr.com/v1/package/gh/${OWNER}/${REPO}@${BRANCH}`;
 
 const CDN =
   `https://cdn.jsdelivr.net/gh/${OWNER}/${REPO}@${BRANCH}/${BASE_PATH}`;
 
 async function loadGalleries() {
-  const res = await fetch(API);
+  const res = await fetch(ROOT_API);
   const data = await res.json();
+
+  // find the project-images directory
+  const projectImagesDir = data.files.find(
+    f => f.type === "directory" && f.name === BASE_PATH
+  );
+
+  if (!projectImagesDir || !projectImagesDir.files) {
+    console.error("project-images folder not found");
+    return;
+  }
 
   const container = document.getElementById("galleries");
 
-  data.files
+  projectImagesDir.files
     .filter(f => f.type === "directory")
     .forEach(folder => {
       const name = folder.name.replace(/-/g, " ");
@@ -107,6 +117,7 @@ async function loadGalleries() {
 
 loadGalleries();
 </script>
+
 
 </body>
 </html>
