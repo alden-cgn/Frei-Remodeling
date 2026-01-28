@@ -1,5 +1,6 @@
 # Pansing – Whole Home Remodel
 
+<div style="display: grid; grid-template-columns: repeat(3, 1fr)">
 <img src="./frei-remodeling-pansing-whole-home-project-01.webp" width="240" />
 <img src="./frei-remodeling-pansing-whole-home-project-02.webp" width="240" />
 <img src="./frei-remodeling-pansing-whole-home-project-03.webp" width="240" />
@@ -44,6 +45,5 @@
 <img src="./frei-remodeling-pansing-whole-home-project-42.webp" width="240" />
 <img src="./frei-remodeling-pansing-whole-home-project-43.webp" width="240" />
 <img src="./frei-remodeling-pansing-whole-home-project-44.webp" width="240" />
-
-
+</div>
 
