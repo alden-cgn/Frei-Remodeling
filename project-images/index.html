@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Project Image Galleries</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 32px;
+      background: #f7f7f7;
+    }
+
+    h1 {
+      margin-bottom: 24px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0,0,0,.08);
+      transition: transform .2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-title {
+      padding: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      text-transform: capitalize;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Project Image Galleries</h1>
+
+<div id="galleries" class="gallery-grid"></div>
+
+<script>
+const OWNER = "alden-cgn";
+const REPO = "Frei-Remodeling";
+const BRANCH = "main";
+const BASE_PATH = "project-images";
+
+const API =
+  `https://data.jsdelivr.com/v1/package/gh/${OWNER}/${REPO}@${BRANCH}/${BASE_PATH}`;
+
+const CDN =
+  `https://cdn.jsdelivr.net/gh/${OWNER}/${REPO}@${BRANCH}/${BASE_PATH}`;
+
+async function loadGalleries() {
+  const res = await fetch(API);
+  const data = await res.json();
+
+  const container = document.getElementById("galleries");
+
+  data.files
+    .filter(f => f.type === "directory")
+    .forEach(folder => {
+      const name = folder.name.replace(/-/g, " ");
+
+      const img = document.createElement("img");
+      img.src = `${CDN}/${folder.name}/`;
+      img.loading = "lazy";
+
+      const title = document.createElement("div");
+      title.className = "card-title";
+      title.textContent = name;
+
+      const card = document.createElement("div");
+      card.className = "card";
+
+      card.appendChild(img);
+      card.appendChild(title);
+
+      const link = document.createElement("a");
+      link.href = `${folder.name}/index.html`;
+      link.appendChild(card);
+
+      container.appendChild(link);
+    });
+}
+
+loadGalleries();
+</script>
+
+</body>
+</html>
