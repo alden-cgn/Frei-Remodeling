@@ -69,55 +69,60 @@ const BASE_PATH = "project-images";
 const ROOT_API =
   `https://data.jsdelivr.com/v1/package/gh/${OWNER}/${REPO}@${BRANCH}?structure=flat`;
 
-
 const CDN =
   `https://cdn.jsdelivr.net/gh/${OWNER}/${REPO}@${BRANCH}/${BASE_PATH}`;
 
 async function loadGalleries() {
   const res = await fetch(ROOT_API);
-  const data = await res.json();
-
-  // find the project-images directory
-  const projectImagesDir = data.files.find(
-    f => f.type === "directory" && f.name === BASE_PATH
-  );
-
-  if (!projectImagesDir || !projectImagesDir.files) {
-    console.error("project-images folder not found");
+  if (!res.ok) {
+    console.error("Failed to fetch repo index");
     return;
   }
 
+  const data = await res.json();
   const container = document.getElementById("galleries");
 
-  projectImagesDir.files
-    .filter(f => f.type === "directory")
-    .forEach(folder => {
-      const name = folder.name.replace(/-/g, " ");
+  // Derive unique project folders from flat file paths
+  const folders = [...new Set(
+    data.files
+      .filter(f => f.type === "file")
+      .map(f => f.name)
+      .filter(path => path.startsWith(`${BASE_PATH}/`))
+      .map(path => path.split("/")[1])
+  )];
 
-      const img = document.createElement("img");
-      img.src = `${CDN}/${folder.name}/`;
-      img.loading = "lazy";
+  if (!folders.length) {
+    console.warn("No project folders found");
+    return;
+  }
 
-      const title = document.createElement("div");
-      title.className = "card-title";
-      title.textContent = name;
+  folders.forEach(folder => {
+    const displayName = folder.replace(/-/g, " ");
 
-      const card = document.createElement("div");
-      card.className = "card";
+    const img = document.createElement("img");
+    img.src = `${CDN}/${folder}/`;
+    img.loading = "lazy";
 
-      card.appendChild(img);
-      card.appendChild(title);
+    const title = document.createElement("div");
+    title.className = "card-title";
+    title.textContent = displayName;
 
-      const link = document.createElement("a");
-      link.href = `${folder.name}/index.html`;
-      link.appendChild(card);
+    const card = document.createElement("div");
+    card.className = "card";
+    card.appendChild(img);
+    card.appendChild(title);
 
-      container.appendChild(link);
-    });
+    const link = document.createElement("a");
+    link.href = `${folder}/index.html`;
+    link.appendChild(card);
+
+    container.appendChild(link);
+  });
 }
 
 loadGalleries();
 </script>
+
 
 
 </body>
