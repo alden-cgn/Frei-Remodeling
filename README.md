@@ -2,7 +2,7 @@ This is Frei Remodeling's Media library. This is being used to offload the wordp
 
 Here is the url format for using the images:
 
-https://cdn.jsdelivr.net/gh/{OWNER}/{REPO}@{BRANCH}/{PATH}
+https://cdn.jsdelivr.net/gh/alden-cgn/Frei-Remodeling@main/project-images/project/image-title-here.webp
 
 Specifically:
 
