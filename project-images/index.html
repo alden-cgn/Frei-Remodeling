@@ -67,7 +67,8 @@ const BRANCH = "main";
 const BASE_PATH = "project-images";
 
 const ROOT_API =
-  `https://data.jsdelivr.com/v1/package/gh/${OWNER}/${REPO}@${BRANCH}`;
+  `https://data.jsdelivr.com/v1/package/gh/${OWNER}/${REPO}@${BRANCH}?structure=flat`;
+
 
 const CDN =
   `https://cdn.jsdelivr.net/gh/${OWNER}/${REPO}@${BRANCH}/${BASE_PATH}`;
